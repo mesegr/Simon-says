@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simonahorasidice.R
 import com.example.simonahorasidice.model.Colores
+import com.example.simonahorasidice.model.Datos
 import com.example.simonahorasidice.modelview.MyViewModel
 
 
@@ -141,6 +144,12 @@ fun buttonStart(viewModel: MyViewModel,modifier: Modifier,) {
 @Composable
 fun UI(viewModel: MyViewModel) {
     val record by viewModel.recordLiveData.observeAsState(viewModel.getRecord())
+    val context = LocalContext.current
+
+    // Guarda el récord cada vez que cambie
+    LaunchedEffect(record) {
+        Datos.guardarRecord(context)
+    }
     val rondas by viewModel.rondasLiveData.observeAsState(viewModel.getRondas())
 
     var lista_colores = remember { mutableStateListOf<Int>() }

@@ -13,7 +13,9 @@ import kotlin.random.Random
 import com.example.simonahorasidice.model.Datos.recordP
 import com.example.simonahorasidice.model.Datos.rondasP
 import kotlinx.coroutines.delay
+
 import kotlinx.coroutines.launch
+
 
 /**
  * ViewModel para manejar la lógica de la aplicación.
@@ -69,6 +71,7 @@ class MyViewModel(): ViewModel() {
         if (getRecord() < getRondas()) {
             recordP = rondasP
             recordData.value = recordP
+
         }
     }
 
