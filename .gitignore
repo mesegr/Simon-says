@@ -1,0 +1,32 @@
+# IDE settings and project files
+.idea/
+**/.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.fleet/
+
+# Android Studio and Gradle generated files
+**/.gradle/
+**/build/
+**/captures/
+**/.externalNativeBuild/
+**/.cxx/
+**/.kotlin/
+local.properties
+**/local.properties
+
+# Local signing keys and credentials
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
