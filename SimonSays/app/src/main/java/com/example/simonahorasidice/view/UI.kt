@@ -13,25 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simonahorasidice.R
 import com.example.simonahorasidice.model.Colores
-import com.example.simonahorasidice.model.Datos
 import com.example.simonahorasidice.modelview.MyViewModel
 
 
@@ -65,24 +59,15 @@ fun Record(record: Int) {
 @Composable
 fun buttonColor(
     viewModel: MyViewModel,
-    listaColores: MutableList<Int>,
-    lista_Random: MutableList<Int>,
+    activo: Boolean,
     colorValor: Int,
     color: Color,
     modifier: Modifier,
     shape: RoundedCornerShape
 ) {
-    var _activo by remember { mutableStateOf(viewModel.estadosLiveData.value!!.botonesColoresActivos) }
-
-    viewModel.estadosLiveData.observe(LocalLifecycleOwner.current) {
-        _activo = viewModel.estadosLiveData.value!!.botonesColoresActivos
-    }
-
     Button(
-        enabled = _activo,
-        onClick = {
-            viewModel.añadirColor(colorValor, listaColores, lista_Random)
-        },
+        enabled = activo,
+        onClick = { viewModel.añadirColor(colorValor) },
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = shape,
         modifier = modifier
@@ -111,17 +96,11 @@ fun rondas(numeroRondas: Int) {
  * @param viewModel Instancia de MyViewModel.
  */
 @Composable
-fun buttonStart(viewModel: MyViewModel,modifier: Modifier,) {
-    var _activo by remember { mutableStateOf(viewModel.estadosLiveData.value!!.startActivo) }
-
-    viewModel.estadosLiveData.observe(LocalLifecycleOwner.current) {
-        _activo = viewModel.estadosLiveData.value!!.startActivo
-    }
-
+fun buttonStart(viewModel: MyViewModel, activo: Boolean, modifier: Modifier,) {
     val rosa = Color(0x95D7D7D7)
 
     Button(
-        enabled = _activo,
+        enabled = activo,
         onClick = { viewModel.setRandom() },
         colors = ButtonDefaults.buttonColors(containerColor = rosa, contentColor = Color.Black),
         modifier = modifier
@@ -143,21 +122,13 @@ fun buttonStart(viewModel: MyViewModel,modifier: Modifier,) {
  */
 @Composable
 fun UI(viewModel: MyViewModel) {
-    val record by viewModel.recordLiveData.observeAsState(viewModel.getRecord())
+    val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // Guarda el récord cada vez que cambie
-    LaunchedEffect(record) {
-        Datos.guardarRecord(context)
+    LaunchedEffect(state.record) {
+        context.getSharedPreferences("datos_app", android.content.Context.MODE_PRIVATE)
+            .edit().putInt("recordP", state.record).apply()
     }
-    val rondas by viewModel.rondasLiveData.observeAsState(viewModel.getRondas())
-
-    var lista_colores = remember { mutableStateListOf<Int>() }
-
-    val colorRojo by viewModel.rojoLiveData.observeAsState(viewModel.getRed())
-    val colorVerde by viewModel.verdeLiveData.observeAsState(viewModel.getGreen())
-    val colorAzul by viewModel.azulLiveData.observeAsState(viewModel.getBlue())
-    val colorAmarillo by viewModel.amarilloLiveData.observeAsState(viewModel.getYellow())
 
     Box(modifier = Modifier.fillMaxSize()) {
         val backgroundImage = painterResource(id = R.drawable.fondo)
@@ -168,9 +139,9 @@ fun UI(viewModel: MyViewModel) {
             modifier = Modifier.fillMaxSize()
         )
 
-        Record(record)
+        Record(state.record)
 
-        buttonColor(viewModel, lista_colores, viewModel.getRandom(), Colores.ROJO.valorColor, colorRojo,    modifier = Modifier
+        buttonColor(viewModel, state.estado.botonesColoresActivos, Colores.ROJO.valorColor, state.rojo, modifier = Modifier
             .offset(y = 350.dp,x = 5.dp)
             .size(180.dp)
             .background(
@@ -193,7 +164,7 @@ fun UI(viewModel: MyViewModel) {
                 bottomStart = 12.dp
             )
         )
-        buttonColor(viewModel, lista_colores, viewModel.getRandom(), Colores.VERDE.valorColor, colorVerde, modifier = Modifier
+        buttonColor(viewModel, state.estado.botonesColoresActivos, Colores.VERDE.valorColor, state.verde, modifier = Modifier
             .offset(y = 560.dp,x = 5.dp)
             .size(180.dp)
             .background(
@@ -218,7 +189,7 @@ fun UI(viewModel: MyViewModel) {
 
         )
 
-        buttonColor(viewModel, lista_colores, viewModel.getRandom(), Colores.AZUL.valorColor, colorAzul, modifier = Modifier
+        buttonColor(viewModel, state.estado.botonesColoresActivos, Colores.AZUL.valorColor, state.azul, modifier = Modifier
             .offset(y = 350.dp, x = 207.dp)
             .size(180.dp)
             .background(
@@ -241,7 +212,7 @@ fun UI(viewModel: MyViewModel) {
                 bottomStart = 115.dp
             )
         )
-        buttonColor(viewModel, lista_colores, viewModel.getRandom(), Colores.AMARILLO.valorColor, colorAmarillo, modifier = Modifier
+        buttonColor(viewModel, state.estado.botonesColoresActivos, Colores.AMARILLO.valorColor, state.amarillo, modifier = Modifier
             .size(180.dp)
             .offset(y = 560.dp, x = 207.dp)
             .background(
@@ -265,8 +236,8 @@ fun UI(viewModel: MyViewModel) {
             )
         )
 
-        rondas(rondas)
-        buttonStart(viewModel, modifier = Modifier
+        rondas(state.rondas)
+        buttonStart(viewModel, state.estado.startActivo, modifier = Modifier
             .size(105.dp)
             .offset(y = 491.8.dp, x = 143.5.dp)
         )

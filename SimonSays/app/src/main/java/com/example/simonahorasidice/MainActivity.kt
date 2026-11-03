@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.simonahorasidice.model.Datos
 import com.example.simonahorasidice.modelview.MyViewModel
 import com.example.simonahorasidice.view.*
 
@@ -19,9 +18,8 @@ class MainActivity : ComponentActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Datos.cargarRecord(this)
-        // Crear un objeto de la clase MyViewModel y pasarlo a la función composable UI
-        val viewModel = MyViewModel()
+        val preferences = getSharedPreferences("datos_app", MODE_PRIVATE)
+        val viewModel = MyViewModel(preferences.getInt("recordP", 0))
         enableEdgeToEdge()
         setContent {
             UI(viewModel)
