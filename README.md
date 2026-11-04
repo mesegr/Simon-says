@@ -25,7 +25,7 @@ Perfect for quick fun or for training your brain anytime, anywhere!
 
 You can download the app here:
 
-- [Download Simon Says 1.0.0](https://github.com/mesegr/Simon-says/releases/tag/v1.0.0)  
+- [Download Simon Says 1.0.1](https://github.com/mesegr/Simon-says/releases/download/v1.0.1/Download.Simon.Says.apk)
 
 
 ---
