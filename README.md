@@ -6,6 +6,10 @@
 
 Perfect for quick fun or for training your brain anytime, anywhere!
 
+  <p align="center">
+     <img src="img/simon1.jpg" width="32%" alt="juego">
+   </p>
+
 ---
 
 ## 📑 Index
