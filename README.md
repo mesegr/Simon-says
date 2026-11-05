@@ -1,49 +1,50 @@
-# Simon Says Classic 🎮🧠
+# Simon Says Classic
 
-## 📱 About the App
+Juego de memoria para Android: la app ilumina una secuencia de colores y tienes que repetirla en el mismo orden. Cada ronda añade un color más.
 
-**Simon Says Classic** is a mobile application that brings the timeless memory game to your device. Test and improve your memory by repeating sequences of lights and sounds that become progressively more challenging.
+<p align="center">
+  <img src="img/simon1.jpg" width="280" alt="Partida en curso de Simon Says Classic">
+</p>
 
-Perfect for quick fun or for training your brain anytime, anywhere!
+## Funciones
 
-  <p align="center">
-     <img src="img/simon1.jpg" width="32%" alt="juego">
-   </p>
+- Secuencias cada vez más largas, una ronda tras otra
+- Contador de puntos de la partida y récord personal
+- El récord se guarda en el dispositivo
+- Interfaz sencilla, adaptada a distintos tamaños de pantalla
 
----
+## Descarga
 
-## 📑 Index
+[Simon Says Classic 1.0.1 (APK)](https://github.com/mesegr/Simon-says/releases/latest/download/Download.Simon.Says.apk)
 
-- [📱 About the App](#-about-the-app)
-- [📥 Downloads](#-downloads)
-- [🚀 Features](#-features)
-- [🐛 Reporting Bugs & Feedback](#-reporting-bugs--feedback)
+Requiere Android 7.0 o superior. Al instalarlo, Android puede pedirte permiso para instalar apps de orígenes desconocidos. El resto de versiones están en [Releases](https://github.com/mesegr/Simon-says/releases).
 
----
+## Tecnologías
 
-## 📥 Downloads
+- Kotlin y Jetpack Compose
+- Arquitectura MVVM: el estado del juego vive en el `ViewModel` y se expone con `StateFlow`; la interfaz lo observa con `collectAsState`
+- Corrutinas para animar la secuencia de colores
+- `SharedPreferences` para guardar el récord
+- minSdk 24, targetSdk 35
 
-You can download the app here:
+## Estructura
 
-- [Download Simon Says 1.0.1](https://github.com/mesegr/Simon-says/releases/download/v1.0.1/Download.Simon.Says.apk)
+```
+SimonSays/app/src/main/java/com/example/simonahorasidice/
+├── MainActivity.kt          # Punto de entrada y carga del récord
+├── model/                   # Estados del juego y colores
+├── modelview/MyViewModel.kt # Lógica del juego y estado
+├── view/UI.kt               # Pantallas en Jetpack Compose
+└── ui/theme/                # Tema de la app
+```
 
+## Cómo compilar
 
----
+1. Instala una versión reciente de Android Studio.
+2. Clona el repo: `git clone https://github.com/mesegr/Simon-says.git`
+3. Abre la carpeta `SimonSays` con Android Studio y espera a que Gradle sincronice.
+4. Pulsa **Run** con un emulador o un móvil conectado.
 
-## 🚀 Features
+## Errores y sugerencias
 
-✅ Classic memory game experience  
-✅ Progressive difficulty as sequences grow  
-✅ Minimalist and intuitive interface  
-✅ Fun for all ages  
-
----
-
-## 🐛 **Reporting Bugs & Feedback**  
-Found a bug? Have suggestions?  
-- Open an **Issue** on this repo.  
-
-Please include:  
-- **Description**: What happened?  
-- **Steps to reproduce**: How can we trigger it?  
-- **Screenshots/Videos** (if possible).  
+Abre una [issue](https://github.com/mesegr/Simon-says/issues) indicando qué pasó y cómo reproducirlo.
